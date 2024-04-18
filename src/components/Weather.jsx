@@ -1,19 +1,23 @@
 import './Weather.css';
-import winfoimg from '../assets/Sun_PNG_Image_Clipart.png';
+
 import wind from '../assets/wind.png';
 import { useState } from 'react';
+import defaultimg from '../assets/404.png';
 
 export const Weather = () => {
 
   const [name, setName] = useState('');
   const [data, setData] = useState({
-    calcius: 10,
-    bane: 'London',
+    celcius: 10,
+    name: "London",
     humidity: 10,
-    country: 'UK',
-
+    country: "UK",
+    image: defaultimg,
   });
 
+  const handleClick = () => {
+    fetch
+  }
 
 
   return (
@@ -26,14 +30,14 @@ export const Weather = () => {
             <button>Search</button>
           </div>
           <div className="weather__info">
-            <img src={winfoimg} alt="" className='icon' />
-            <h1>25 &deg;C</h1>
-            <h2>London <span>UK</span></h2>
+            <img src={data.image}alt="" className='icon' />
+            <h1>{data.celcius} &deg;C</h1>
+            <h2>{data.name} <span>{data.country}</span></h2>
             <div className='details'>
               <div className='col'>
                 <img src={wind} alt=""  />
                 <div className='humidity'>
-                  <p>55%</p>
+                  <p>{data.humidity}%</p>
                   <p>Humidity</p>
                 </div>
               </div>
