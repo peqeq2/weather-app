@@ -3,6 +3,7 @@ import './Weather.css';
 import wind from '../assets/wind.png';
 import { useState } from 'react';
 import defaultimg from '../assets/404.png';
+import { Axios } from 'axios';
 
 export const Weather = () => {
 
@@ -15,8 +16,24 @@ export const Weather = () => {
     image: defaultimg,
   });
 
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef(null);
+
   const handleClick = () => {
-    fetch
+    if (name !== "") {
+      const ApiURL = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=90d1624964432cb1830b2c3a769d3bec`;
+      Axios.get(ApiURL).then(() => {
+        let imgPath = "";
+        let VideoPath = "";
+
+        if(res.data.eeather[0].main === "Clouds"){
+
+        }
+      })
+
+    }
+    fetch(``)
+
   }
 
 
