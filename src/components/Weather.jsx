@@ -1,9 +1,10 @@
 import './Weather.css';
-
+import cloud from '../assets/cloud.png';
 import wind from '../assets/wind.png';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import defaultimg from '../assets/404.png';
-import { Axios } from 'axios';
+import axios from 'axios';
+import cloudVideo from '../assets/cloudvideo.mp4';
 
 export const Weather = () => {
 
@@ -22,13 +23,26 @@ export const Weather = () => {
   const handleClick = () => {
     if (name !== "") {
       const ApiURL = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=90d1624964432cb1830b2c3a769d3bec`;
-      Axios.get(ApiURL).then(() => {
+      axios.get(ApiURL).then((res) => {
         let imgPath = "";
         let VideoPath = "";
 
         if(res.data.eeather[0].main === "Clouds"){
-
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }else{
+          imgPath=defaultimg;
         }
+        setData({
+          celcius:res.data.main.temp,
+          name:res.data.name,
+          humidity:res.data.main.humidity,
+          speed:res.data.wind.speed,
+          country:res.data.sys.country,
+          image:imgPath,
+          Video:VideoPath,
+        })
+        console.log(res);
       })
 
     }
@@ -43,8 +57,8 @@ export const Weather = () => {
       <div className="container">
         <div className="weather">
           <div className="weather__search">
-            <input type="text" placeholder="Search..." className="weather__search-bar" />
-            <button>Search</button>
+            <input type="text" placeholder="Search..."  onChange={e => setName(e.target.value)} />
+            <button onClick={handleClick}>Search</button>
           </div>
           <div className="weather__info">
             <img src={data.image}alt="" className='icon' />
