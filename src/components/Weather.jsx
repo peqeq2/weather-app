@@ -27,10 +27,35 @@ export const Weather = () => {
         let imgPath = "";
         let VideoPath = "";
 
-        if(res.data.eeather[0].main === "Clouds"){
+        if(res.data.weather[0].main === "Clouds"){
           imgPath=cloud;
           VideoPath=cloudVideo;
-        }else{
+        }
+        if(res.data.weather[0].main === "Rain"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        if(res.data.weather[0].main === "Clear"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        if(res.data.weather[0].main === "Snow"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        if(res.data.weather[0].main === "Mist"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        if(res.data.weather[0].main === "Heze"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        if(res.data.weather[0].main === "Clouds"){
+          imgPath=cloud;
+          VideoPath=cloudVideo;
+        }
+        else{
           imgPath=defaultimg;
         }
         setData({
@@ -62,20 +87,20 @@ export const Weather = () => {
           </div>
           <div className="weather__info">
             <img src={data.image}alt="" className='icon' />
-            <h1>{data.celcius} &deg;C</h1>
+            <h1>{Math.round(data.celcius)} &deg;C</h1>
             <h2>{data.name} <span>{data.country}</span></h2>
             <div className='details'>
               <div className='col'>
                 <img src={wind} alt=""  />
                 <div className='humidity'>
-                  <p>{data.humidity}%</p>
+                  <p>{Math.round(data.humidity)}%</p>
                   <p>Humidity</p>
                 </div>
               </div>
               <div className='col'>
                 <img src={wind} alt=""  />
                 <div className='wind'>
-                  <p>55 km/H</p>
+                  <p>{Math.round(data.speed)} km/H</p>
                   <p>Wind</p>
                 </div>
               </div>
