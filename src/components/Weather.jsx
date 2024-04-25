@@ -1,13 +1,21 @@
 import './Weather.css';
 import cloud from '../assets/cloud.png';
 import wind from '../assets/wind.png';
+import clear from '../assets/clear.png';
+import clearVideo from '../assets/clearvideo.mp4';
+import rain from '../assets/rain.png';
+import rainVideo from '../assets/rainvideo.mp4';
+import snow from '../assets/snow.png';
+import snowVideo from '../assets/snowvideo.mp4';
+import mist from '../assets/mist.png';
+import mistVideo from '../assets/mistvideo.mp4';
 import { useRef, useState } from 'react';
 import defaultimg from '../assets/404.png';
 import axios from 'axios';
 import cloudVideo from '../assets/cloudvideo.mp4';
 
 export const Weather = () => {
-
+  const [error, setError] = useState(false);
   const [name, setName] = useState('');
   const [data, setData] = useState({
     celcius: 10,
@@ -27,36 +35,21 @@ export const Weather = () => {
         let imgPath = "";
         let VideoPath = "";
 
-        if(res.data.weather[0].main === "Clouds"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Rain"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Clear"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Snow"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Mist"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Heze"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        if(res.data.weather[0].main === "Clouds"){
-          imgPath=cloud;
-          VideoPath=cloudVideo;
-        }
-        else{
-          imgPath=defaultimg;
+        if (res.data.weather[0].main === "Clouds") {
+          imgPath = cloud;
+          VideoPath = cloudVideo;
+        } else if (res.data.weather[0].main === "Rain") {
+          imgPath = rain;
+          VideoPath = rainVideo;
+        } else if (res.data.weather[0].main === "Clear") {
+          imgPath = clear;
+          VideoPath = clearVideo;
+        } else if (res.data.weather[0].main === "Snow") {
+          imgPath = snow;
+          VideoPath = snowVideo;
+        } else if (res.data.weather[0].main === "Mist") {
+          imgPath = mist;
+          VideoPath = mistVideo;
         }
         setData({
           celcius:res.data.main.temp,
@@ -67,7 +60,19 @@ export const Weather = () => {
           image:imgPath,
           Video:VideoPath,
         })
+        setShowVideo(false);
+        setTimeout(() => setShowVideo(true), 100);
+        setError(false);
         console.log(res);
+      })
+      .catch((err) => {
+        if(err.response.status === 404){
+          setError("Invalid City Name...!")
+        }else{
+          setError("")
+
+        }
+        setShowVideo(false);
       })
 
     }
@@ -84,6 +89,9 @@ export const Weather = () => {
           <div className="weather__search">
             <input type="text" placeholder="Search..."  onChange={e => setName(e.target.value)} />
             <button onClick={handleClick}>Search</button>
+          </div>
+          <div className="error">
+            <p>{error}</p>
           </div>
           <div className="weather__info">
             <img src={data.image}alt="" className='icon' />
@@ -107,7 +115,12 @@ export const Weather = () => {
             </div>
           </div>
         </div>
-
+          {
+            showVideo &&
+            <video autoPlay loop muted ref={videoRef} className='video-bg'>
+              <source src={data.Video} type='video/mp4' />
+            </video>
+          }
       </div>
     </>
   )
