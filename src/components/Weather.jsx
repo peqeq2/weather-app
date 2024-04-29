@@ -18,11 +18,12 @@ export const Weather = () => {
   const [error, setError] = useState(false);
   const [name, setName] = useState('');
   const [data, setData] = useState({
-    celcius: 10,
-    name: "London",
-    humidity: 10,
-    country: "UK",
+    celcius: 0,
+    name: "-",
+    humidity: 0,
+    country: "",
     image: defaultimg,
+    speed: 0,
   });
 
   const [showVideo, setShowVideo] = useState(false);
