@@ -11,7 +11,7 @@ import mist from '../assets/mist.png';
 import mistVideo from '../assets/mistvideo.mp4';
 import { useRef, useState } from 'react';
 import defaultimg from '../assets/404.png';
-import axios from 'axios';
+
 import cloudVideo from '../assets/cloudvideo.mp4';
 
 export const Weather = () => {
@@ -32,54 +32,58 @@ export const Weather = () => {
   const handleClick = () => {
     if (name !== "") {
       const ApiURL = `https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=90d1624964432cb1830b2c3a769d3bec`;
-      axios.get(ApiURL).then((res) => {
-        let imgPath = "";
-        let VideoPath = "";
 
-        if (res.data.weather[0].main === "Clouds") {
-          imgPath = cloud;
-          VideoPath = cloudVideo;
-        } else if (res.data.weather[0].main === "Rain") {
-          imgPath = rain;
-          VideoPath = rainVideo;
-        } else if (res.data.weather[0].main === "Clear") {
-          imgPath = clear;
-          VideoPath = clearVideo;
-        } else if (res.data.weather[0].main === "Snow") {
-          imgPath = snow;
-          VideoPath = snowVideo;
-        } else if (res.data.weather[0].main === "Mist") {
-          imgPath = mist;
-          VideoPath = mistVideo;
-        }
-        setData({
-          celcius:res.data.main.temp,
-          name:res.data.name,
-          humidity:res.data.main.humidity,
-          speed:res.data.wind.speed,
-          country:res.data.sys.country,
-          image:imgPath,
-          Video:VideoPath,
+      fetch(ApiURL)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
         })
-        setShowVideo(false);
-        setTimeout(() => setShowVideo(true), 100);
-        setError(false);
-        console.log(res);
-      })
-      .catch((err) => {
-        if(err.response.status === 404){
-          setError("Invalid City Name...!")
-        }else{
-          setError("")
+        .then((res) => {
+          let imgPath = "";
+          let VideoPath = "";
 
-        }
-        setShowVideo(false);
-      })
+          if (res.weather[0].main === "Clouds") {
+            imgPath = cloud;
+            VideoPath = cloudVideo;
+          } else if (res.weather[0].main === "Rain" || res.weather[0].main === "Drizzle") {
+            imgPath = rain;
+            VideoPath = rainVideo;
+          } else if (res.weather[0].main === "Clear") {
+            imgPath = clear;
+            VideoPath = clearVideo;
+          } else if (res.weather[0].main === "Snow") {
+            imgPath = snow;
+            VideoPath = snowVideo;
+          } else if (res.weather[0].main === "Mist") {
+            imgPath = mist;
+            VideoPath = mistVideo;
+          }
 
+          setData({
+            celcius: res.main.temp,
+            name: res.name,
+            humidity: res.main.humidity,
+            speed: res.wind.speed,
+            country: res.sys.country,
+            image: imgPath,
+            Video: VideoPath,
+          });
+
+          setShowVideo(false);
+          setTimeout(() => setShowVideo(true), 100);
+          setError(false);
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error('There has been a problem with your fetch operation:', error);
+          setError(error.message);
+          setShowVideo(false);
+        });
     }
-    fetch(``)
+  };
 
-  }
 
 
   return (
